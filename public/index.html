@@ -2,178 +2,1391 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Descargar App - Colonia San Luis Perla Verde</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1B5E20">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Perla Verde">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="icon" type="image/png" href="/icons/icon-192.png">
+  <link rel="manifest" href="/manifest.json">
+  <title>Colonia San Luis – Perla Verde</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Cabinet+Grotesk:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary: #1B5E20;
+      --primary-dark: #0E3813;
+      --primary-light: #E8F5E9;
+      --accent: #D4AF37;
+      --accent-light: #FFF8E1;
+      --bg: #F4F7F4;
+      --card-bg: #FFFFFF;
+      --text-main: #1C2826;
+      --text-muted: #617066;
+      --border: #E0E7E1;
+      --status-active: #2E7D32;
+      --status-danger: #D32F2F;
+      --status-warning: #ED6C02;
+      --shadow: 0 4px 14px rgba(27, 94, 32, 0.08);
+      --radius: 16px;
+    }
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
     }
     body {
-      background: linear-gradient(135deg, #0d3b14 0%, #1b5e20 50%, #2e7d32 100%);
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg);
+      color: var(--text-main);
       min-height: 100vh;
+      padding-bottom: 84px;
+      overflow-x: hidden;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
+      padding: 16px;
+      padding-top: max(16px, env(safe-area-inset-top));
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-top {
       display: flex;
-      justify-content: center;
+      justify-content: space-between;
       align-items: center;
-      padding: 20px;
-      color: #333;
     }
-    .card {
-      background: #ffffff;
-      max-width: 480px;
-      width: 100%;
-      border-radius: 24px;
-      padding: 32px 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-      text-align: center;
+    .club-branding {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .badge-org {
-      display: inline-block;
-      background: #e8f5e9;
-      color: #1b5e20;
-      font-size: 11px;
+    .club-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      object-fit: cover;
+      background: #fff;
+    }
+    .club-title h1 {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      line-height: 1.2;
+    }
+    .club-title span {
+      font-size: 0.75rem;
+      color: var(--accent);
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .role-badge {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      transition: all 0.2s;
+    }
+    .role-badge:active { transform: scale(0.96); }
+
+    /* Install PWA Prompt Banner */
+    #pwa-install-banner {
+      background: linear-gradient(90deg, #1B5E20, #2E7D32);
+      color: #fff;
+      padding: 10px 16px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    #pwa-install-banner button {
+      background: var(--accent);
+      color: #1B3B1F;
+      border: none;
       padding: 6px 14px;
       border-radius: 20px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      font-weight: 800;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    /* Section Tabs */
+    .section-view { display: none; }
+    .section-view.active { display: block; animation: fadeIn 0.2s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 12px;
     }
-    .team-title {
-      font-size: 24px;
+    .card-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.1rem;
       font-weight: 800;
-      color: #1b5e20;
-      margin-bottom: 4px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
-    .subtitle {
-      font-size: 13px;
-      color: #666;
-      margin-bottom: 24px;
+
+    /* Match Card Special */
+    .hero-match {
+      background: linear-gradient(135deg, #0d3814 0%, #1B5E20 100%);
+      color: white;
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      position: relative;
+      overflow: hidden;
     }
-    .btn-download {
+    .hero-match::after {
+      content: '⚽';
+      position: absolute;
+      right: -10px;
+      bottom: -10px;
+      font-size: 5rem;
+      opacity: 0.08;
+      pointer-events: none;
+    }
+    .hero-badge {
+      background: var(--accent);
+      color: #1B3B1F;
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .match-teams {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 12px 0;
+    }
+    .team-col {
+      text-align: center;
+      flex: 1;
+    }
+    .team-badge-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid var(--accent);
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      background: linear-gradient(135deg, #2e7d32, #1b5e20);
-      color: #ffffff;
-      text-decoration: none;
-      font-size: 18px;
+      margin: 0 auto 6px;
       font-weight: 800;
-      padding: 18px 24px;
-      border-radius: 16px;
-      box-shadow: 0 8px 20px rgba(27, 94, 32, 0.4);
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      cursor: pointer;
-      border: none;
-      width: 100%;
+      font-size: 0.9rem;
     }
-    .btn-download:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 24px rgba(27, 94, 32, 0.5);
-    }
-    .btn-download:active {
-      transform: translateY(1px);
-    }
-    .apk-size-info {
-      font-size: 12px;
-      color: #888;
-      margin-top: 8px;
-      margin-bottom: 24px;
-    }
-    .steps-box {
-      background: #f8faf8;
-      border: 1px solid #e0e6e0;
-      border-radius: 16px;
-      padding: 16px;
-      text-align: left;
-      margin-bottom: 20px;
-    }
-    .steps-box h3 {
-      font-size: 14px;
-      color: #1b5e20;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-    .step-item {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-      font-size: 13px;
-      line-height: 1.4;
-      color: #444;
-    }
-    .step-item:last-child {
-      margin-bottom: 0;
-    }
-    .step-num {
-      background: #1b5e20;
-      color: #fff;
-      font-weight: bold;
-      font-size: 12px;
-      width: 22px;
-      height: 22px;
+    .vs-circle {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      color: #1B3B1F;
+      font-weight: 900;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
+      font-size: 0.75rem;
+      margin: 0 8px;
     }
-    .btn-share {
-      background: #25d366;
-      color: white;
-      text-decoration: none;
+    .match-meta {
+      font-size: 0.8rem;
+      display: flex;
+      gap: 12px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* Live Attendance Counters */
+    .counters-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin: 12px 0;
+    }
+    .counter-box {
+      background: #F1F8F2;
+      border-radius: 12px;
+      padding: 10px 6px;
+      text-align: center;
+      border: 1px solid #D6E8D8;
+    }
+    .counter-number {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      line-height: 1.1;
+    }
+    .counter-label {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .counter-box.confirmed .counter-number { color: var(--status-active); }
+    .counter-box.rejected .counter-number { color: var(--status-danger); }
+    .counter-box.pending .counter-number { color: var(--status-warning); }
+
+    /* Action Buttons */
+    .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px 18px;
-      font-size: 14px;
-      font-weight: 700;
-      border-radius: 12px;
       width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-accent { background: var(--accent); color: #1B3B1F; font-weight: 800; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
+    .btn-whatsapp { background: #25D366; color: white; }
+    .btn-danger { background: #FFEBEE; color: var(--status-danger); border: 1px solid #FFCDD2; }
+    .btn-group { display: flex; gap: 8px; margin-top: 8px; }
+
+    /* Player list */
+    .player-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      margin-bottom: 8px;
+    }
+    .player-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .jersey-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+    }
+    .status-pill {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-weight: 700;
+    }
+    .status-pill.confirmed { background: #E8F5E9; color: var(--status-active); }
+    .status-pill.rejected { background: #FFEBEE; color: var(--status-danger); }
+    .status-pill.pending { background: #FFF8E1; color: var(--status-warning); }
+
+    /* Poster Preview Modal */
+    .poster-container {
+      border-radius: 16px;
+      padding: 20px;
+      color: white;
+      border: 2px solid var(--accent);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .poster-verde { background: linear-gradient(145deg, #09260E, #1B5E20, #0E3813); }
+    .poster-dark { background: linear-gradient(145deg, #101511, #1B241C, #0A0D0B); }
+    .poster-white { background: linear-gradient(145deg, #FFFFFF, #E8F5E9); color: var(--text-main); }
+    .poster-white h2 { color: var(--primary-dark) !important; }
+
+    /* Bottom Navigation */
+    nav.bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0;
+      padding-bottom: max(8px, env(safe-area-inset-bottom));
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      z-index: 100;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      flex: 1;
+      border: none;
+      background: none;
+    }
+    .nav-item.active {
+      color: var(--primary);
+      font-weight: 800;
+    }
+    .nav-icon {
+      font-size: 1.25rem;
+    }
+
+    /* Modal dialog */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 200;
+      backdrop-filter: blur(3px);
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-body {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-family: 'Cabinet Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--primary-dark);
+    }
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      font-family: inherit;
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <span class="badge-org">Corp. Colombia Activa y Saludable</span>
-    <h1 class="team-title">Colonia San Luis</h1>
-    <h2 style="font-size: 18px; color: #2e7d32; font-weight: 700; margin-bottom: 6px;">Perla Verde • App Oficial</h2>
-    <p class="subtitle">Gestión de convocatorias, cuotas de arbitraje, pagos y estadísticas.</p>
 
-    <!-- MAIN SINGLE-CLICK DOWNLOAD BUTTON -->
-    <a href="/PerlaVerde_ColoniaSanLuis.apk" download="PerlaVerde_ColoniaSanLuis.apk" class="btn-download" id="downloadBtn">
-      <span>⬇️</span>
-      <span>DESCARGAR APK DIRECTO</span>
-    </a>
-    <p class="apk-size-info">Instalador oficial Android • Seguro y sin costo</p>
-
-    <div class="steps-box">
-      <h3>¿Cómo instalar en tu celular?</h3>
-      <div class="step-item">
-        <span class="step-num">1</span>
-        <span>Toca el botón verde <strong>"DESCARGAR APK"</strong> de arriba.</span>
-      </div>
-      <div class="step-item">
-        <span class="step-num">2</span>
-        <span>Al terminar la descarga, pulsa en la notificación para <strong>Abrir el archivo</strong>.</span>
-      </div>
-      <div class="step-item">
-        <span class="step-num">3</span>
-        <span>Si tu celular muestra "Permitir aplicaciones de esta fuente", activa el permiso y pulsa <strong>"Instalar"</strong>.</span>
+  <!-- PWA Install Banner -->
+  <div id="pwa-install-banner">
+    <div style="display:flex; align-items:center; gap:8px;">
+      <span style="font-size:1.3rem;">📲</span>
+      <div>
+        <div style="font-weight:800; font-size:0.85rem;">Instalar Colonia San Luis PWA</div>
+        <div style="font-size:0.7rem; opacity:0.9;">Accede sin internet y añade a pantalla de inicio</div>
       </div>
     </div>
+    <button id="pwa-install-btn">Instalar</button>
+  </div>
 
-    <a href="whatsapp://send?text=🟢⚪ ¡Hola equipo! Descarga la app oficial de Colonia San Luis – Perla Verde aquí: " class="btn-share" id="shareBtn">
-      <span>💬 Compartir con el equipo en WhatsApp</span>
-    </a>
+  <!-- Header -->
+  <header>
+    <div class="header-top">
+      <div class="club-branding">
+        <img src="/icons/logo.jpg" alt="Logo" class="club-logo" onerror="this.src='/icons/icon-192.png'">
+        <div class="club-title">
+          <h1>COLONIA SAN LUIS</h1>
+          <span>Perla Verde FC</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="role-badge" id="role-switcher-btn" title="Cambiar Rol">
+          <span id="role-icon">👑</span>
+          <span id="role-label">ADMIN</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main App Sections -->
+  <div class="container">
+
+    <!-- 1. INICIO (DASHBOARD) -->
+    <section id="view-dashboard" class="section-view active">
+      <!-- Próximo Partido Hero Card -->
+      <div class="card hero-match">
+        <span class="hero-badge">⚽ PRÓXIMO ENCUENTRO OFICIAL</span>
+        <div class="match-teams">
+          <div class="team-col">
+            <div class="team-badge-circle">CSL</div>
+            <strong style="font-size:0.9rem;">COLONIA</strong>
+          </div>
+          <div class="vs-circle">VS</div>
+          <div class="team-col">
+            <div class="team-badge-circle" style="background:#555;" id="dash-rival-initials">RIV</div>
+            <strong style="font-size:0.9rem;" id="dash-rival-name">Rival</strong>
+          </div>
+        </div>
+        <div class="match-meta">
+          <span>📅 <strong id="dash-match-date">Sábado</strong></span>
+          <span>⏰ <strong id="dash-match-time">16:00</strong></span>
+          <span>📍 <strong id="dash-match-venue">Cancha La Victoria</strong></span>
+        </div>
+
+        <!-- Asistencia en vivo -->
+        <div style="background:rgba(255,255,255,0.12); border-radius:12px; padding:10px; margin-top:12px;">
+          <div style="font-size:0.75rem; font-weight:700; color:var(--accent); margin-bottom:6px;">📊 CONTROL DE ASISTENCIA EN VIVO:</div>
+          <div class="counters-row" style="margin:0;">
+            <div class="counter-box confirmed">
+              <div class="counter-number" id="dash-confirmed-count">0</div>
+              <div class="counter-label">Confirmados</div>
+            </div>
+            <div class="counter-box rejected">
+              <div class="counter-number" id="dash-rejected-count">0</div>
+              <div class="counter-label">Bajas</div>
+            </div>
+            <div class="counter-box pending">
+              <div class="counter-number" id="dash-pending-count">0</div>
+              <div class="counter-label">Sin responder</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="btn-group" style="margin-top:12px;">
+          <button class="btn btn-accent" onclick="app.openPublicConfirmation()">👉 Mi Confirmación</button>
+          <button class="btn btn-whatsapp" onclick="app.shareBroadcastWhatsApp()">📲 Difundir WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- Resumen Financiero Rápido -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">💵 Tesorería & Arbitraje</div>
+          <span style="font-size:0.75rem; color:var(--text-muted);">Temporada Actual</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">Total Recaudado</div>
+            <div style="font-size:1.25rem; font-weight:800; color:var(--primary);" id="dash-total-collected">$0</div>
+          </div>
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">Saldo Pendiente</div>
+            <div style="font-size:1.25rem; font-weight:800; color:var(--status-danger);" id="dash-total-pending">$0</div>
+          </div>
+        </div>
+        <button class="btn btn-outline" onclick="app.navigate('cuotas')">Ver Control de Pagos</button>
+      </div>
+
+      <!-- Top Goleador Preview -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🏆 Goleadores del Equipo</div>
+          <button style="border:none; background:none; color:var(--primary); font-weight:700; font-size:0.8rem; cursor:pointer;" onclick="app.navigate('stats')">Ver todos</button>
+        </div>
+        <div id="dash-scorers-list"></div>
+      </div>
+    </section>
+
+    <!-- 2. PARTIDOS & CONVOCATORIAS -->
+    <section id="view-partidos" class="section-view">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h2 style="font-family:'Cabinet Grotesk'; font-size:1.3rem; color:var(--primary-dark);">Fixture & Convocatorias</h2>
+        <button class="btn btn-primary" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="app.openNewMatchModal()">+ Nuevo Partido</button>
+      </div>
+      <div id="matches-list-container"></div>
+    </section>
+
+    <!-- 3. PLANTEL -->
+    <section id="view-plantel" class="section-view">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h2 style="font-family:'Cabinet Grotesk'; font-size:1.3rem; color:var(--primary-dark);">Plantel de Jugadores</h2>
+        <button class="btn btn-primary" style="width:auto; padding:8px 14px; font-size:0.8rem;" onclick="app.openNewPlayerModal()">+ Jugador</button>
+      </div>
+      <input type="text" id="player-search-input" placeholder="🔍 Buscar por nombre, apodo o dorsal..." oninput="app.renderPlayersList()">
+      <div id="players-list-container"></div>
+    </section>
+
+    <!-- 4. CUOTAS / TESORERÍA -->
+    <section id="view-cuotas" class="section-view">
+      <h2 style="font-family:'Cabinet Grotesk'; font-size:1.3rem; color:var(--primary-dark); margin-bottom:12px;">Gestión de Cuotas & Arbitraje</h2>
+      <div class="card" style="background:#E8F5E9; border-color:#C8E6C9;">
+        <div style="font-weight:800; color:var(--primary); margin-bottom:4px;">⚽ Arbitraje por Partido</div>
+        <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:10px;">Cuota estándar: $10.000 COP por jugador convocado.</div>
+        <div style="display:flex; justify-content:space-between;">
+          <span>Total Adeudado: <strong style="color:var(--status-danger);" id="cuotas-total-debt">$0</strong></span>
+          <span>Total Recaudado: <strong style="color:var(--primary);" id="cuotas-total-paid">$0</strong></span>
+        </div>
+      </div>
+      <div id="debtors-list-container"></div>
+    </section>
+
+    <!-- 5. ESTADÍSTICAS -->
+    <section id="view-stats" class="section-view">
+      <h2 style="font-family:'Cabinet Grotesk'; font-size:1.3rem; color:var(--primary-dark); margin-bottom:12px;">Estadísticas del Torneo</h2>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">⚽ Tabla de Goleadores</div>
+        </div>
+        <div id="stats-goals-table"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">🟨 🟥 Registro Disciplinario</div>
+        </div>
+        <div id="stats-cards-table"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Bottom Navigation -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" onclick="app.navigate('dashboard')">
+      <span class="nav-icon">🏠</span>
+      <span>Inicio</span>
+    </button>
+    <button class="nav-item" onclick="app.navigate('partidos')">
+      <span class="nav-icon">⚽</span>
+      <span>Partidos</span>
+    </button>
+    <button class="nav-item" onclick="app.navigate('plantel')">
+      <span class="nav-icon">👥</span>
+      <span>Plantel</span>
+    </button>
+    <button class="nav-item" onclick="app.navigate('cuotas')">
+      <span class="nav-icon">💵</span>
+      <span>Cuotas</span>
+    </button>
+    <button class="nav-item" onclick="app.navigate('stats')">
+      <span class="nav-icon">📊</span>
+      <span>Estadísticas</span>
+    </button>
+  </nav>
+
+  <!-- MODALS -->
+
+  <!-- Modal: Confirmación Pública de Jugador (Requisito 2) -->
+  <div class="modal-overlay" id="modal-public-confirm">
+    <div class="modal-body">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Confirmar Asistencia</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);" id="confirm-match-subtitle">Colonia San Luis vs Rival</div>
+        </div>
+        <button class="close-btn" onclick="app.closeModal('modal-public-confirm')">&times;</button>
+      </div>
+
+      <div style="background:var(--primary-light); padding:10px; border-radius:10px; margin-bottom:12px; font-size:0.8rem;">
+        🔒 <strong>Verificación de Identidad:</strong> Selecciona tu nombre e ingresa los 2 últimos dígitos de tu documento o teléfono.
+      </div>
+
+      <label>Tu Nombre / Dorsal:</label>
+      <select id="confirm-player-select" onchange="app.onPublicPlayerSelected()"></select>
+
+      <label>Últimos 2 dígitos de documento / celular:</label>
+      <input type="text" id="confirm-pin" maxlength="2" placeholder="Ej: 42">
+
+      <div style="margin:16px 0;">
+        <label>¿Asistirás al partido?:</label>
+        <div style="display:flex; gap:10px; margin-top:6px;">
+          <button type="button" class="btn btn-outline" id="decision-yes" onclick="app.selectDecision(true)" style="flex:1;">✓ Sí, Asistiré</button>
+          <button type="button" class="btn btn-outline" id="decision-no" onclick="app.selectDecision(false)" style="flex:1;">✗ No puedo ir</button>
+        </div>
+      </div>
+
+      <div id="absence-reason-box" style="display:none;">
+        <label>Motivo de ausencia:</label>
+        <select id="absence-reason-select">
+          <option value="Trabajo">Trabajo / Turno laboral</option>
+          <option value="Lesión">Lesión / Salud</option>
+          <option value="Viaje">Viaje fuera de la ciudad</option>
+          <option value="Familiar">Compromiso familiar</option>
+          <option value="Otro">Otro motivo</option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary" style="margin-top:12px;" onclick="app.submitPublicConfirmation()">Guardar Mi Confirmación</button>
+    </div>
+  </div>
+
+  <!-- Modal: Convocatoria & Llamado Final (Requisito 3 y 4) -->
+  <div class="modal-overlay" id="modal-convocatoria">
+    <div class="modal-body">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="convo-modal-title">Convocatoria Oficial</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);" id="convo-modal-subtitle">vs Rival</div>
+        </div>
+        <button class="close-btn" onclick="app.closeModal('modal-convocatoria')">&times;</button>
+      </div>
+
+      <!-- Contadores en tiempo real -->
+      <div class="counters-row">
+        <div class="counter-box confirmed">
+          <div class="counter-number" id="convo-count-conf">0</div>
+          <div class="counter-label">Confirmados</div>
+        </div>
+        <div class="counter-box rejected">
+          <div class="counter-number" id="convo-count-rej">0</div>
+          <div class="counter-label">Bajas</div>
+        </div>
+        <div class="counter-box pending">
+          <div class="counter-number" id="convo-count-pend">0</div>
+          <div class="counter-label">Pendientes</div>
+        </div>
+      </div>
+
+      <div class="btn-group" style="margin-bottom:12px;">
+        <button class="btn btn-whatsapp" onclick="app.shareBroadcastWhatsApp()">📲 Difusión WhatsApp</button>
+        <button class="btn btn-outline" onclick="app.remindPendingWhatsApp()">⚠️ Recordar Pendientes</button>
+      </div>
+
+      <!-- Llamado Final (Requisito 4) -->
+      <div style="background:#FFF3E0; border:1px solid #FFE0B2; border-radius:10px; padding:10px; margin-bottom:12px;">
+        <div style="font-weight:800; font-size:0.8rem; color:#E65100;">🚨 CIERRE DE CONVOCATORIA (LLAMADO FINAL)</div>
+        <div style="font-size:0.72rem; color:#6D4C41; margin-bottom:8px;">Cierra la lista oficial. Los jugadores sin respuesta serán descartados automáticamente.</div>
+        <button class="btn" id="convo-close-call-btn" style="background:#E65100; color:white; padding:8px;" onclick="app.toggleFinalCall()">🔒 Cerrar Lista Definitiva</button>
+      </div>
+
+      <div style="font-weight:700; font-size:0.85rem; margin-bottom:8px;">Lista de Jugadores:</div>
+      <div id="convo-players-list"></div>
+    </div>
+  </div>
+
+  <!-- Modal: Diseñador de Póster Matchday (Requisito 5) -->
+  <div class="modal-overlay" id="modal-poster">
+    <div class="modal-body" style="max-width:520px;">
+      <div class="modal-header">
+        <div class="modal-title">🎨 Póster Oficial de Matchday</div>
+        <button class="close-btn" onclick="app.closeModal('modal-poster')">&times;</button>
+      </div>
+
+      <!-- Theme Selector -->
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <button class="btn btn-outline" style="flex:1; padding:6px; font-size:0.75rem;" onclick="app.setPosterTheme('poster-verde')">🟢 Verde Esmeralda</button>
+        <button class="btn btn-outline" style="flex:1; padding:6px; font-size:0.75rem;" onclick="app.setPosterTheme('poster-dark')">⚫ Oscuro Élite</button>
+        <button class="btn btn-outline" style="flex:1; padding:6px; font-size:0.75rem;" onclick="app.setPosterTheme('poster-white')">⚪ Blanco Perla</button>
+      </div>
+
+      <!-- Poster Visual Card -->
+      <div class="poster-container poster-verde" id="poster-card-render">
+        <div style="background:var(--accent); color:#1B3B1F; display:inline-block; padding:4px 14px; border-radius:20px; font-weight:900; font-size:0.7rem; margin-bottom:10px;">🏆 MATCHDAY TORNEO AMATEUR</div>
+        <h2 style="font-family:'Cabinet Grotesk'; font-size:1.6rem; font-weight:900; letter-spacing:1px; color:#fff;">COLONIA SAN LUIS</h2>
+        <div style="color:var(--accent); font-weight:800; font-size:0.85rem; margin-bottom:14px;">PERLA VERDE FC</div>
+
+        <div style="background:rgba(0,0,0,0.3); border-radius:12px; padding:12px; margin-bottom:12px;">
+          <div style="font-size:1.1rem; font-weight:800;">VS <span id="poster-rival">Rival</span></div>
+          <div style="font-size:0.8rem; margin-top:4px;" id="poster-datetime">Sábado • 16:00</div>
+          <div style="font-size:0.75rem; opacity:0.85;" id="poster-venue">📍 Cancha La Victoria</div>
+        </div>
+
+        <div style="background:rgba(0,0,0,0.2); border-radius:10px; padding:10px; text-align:left;">
+          <div style="font-size:0.72rem; font-weight:800; color:var(--accent); margin-bottom:4px;">📋 NÓMINA CONVOCADA:</div>
+          <div id="poster-squad" style="font-size:0.75rem; line-height:1.4; columns:2;"></div>
+        </div>
+      </div>
+
+      <button class="btn btn-whatsapp" onclick="app.sharePosterWhatsApp()">📲 Compartir Póster en WhatsApp</button>
+    </div>
+  </div>
+
+  <!-- Modal: Crear/Editar Partido -->
+  <div class="modal-overlay" id="modal-match-edit">
+    <div class="modal-body">
+      <div class="modal-header">
+        <div class="modal-title">Programar Partido</div>
+        <button class="close-btn" onclick="app.closeModal('modal-match-edit')">&times;</button>
+      </div>
+      <label>Rival:</label>
+      <input type="text" id="edit-match-opponent" placeholder="Ej: Los Pumas FC">
+      <label>Torneo:</label>
+      <input type="text" id="edit-match-tournament" value="Torneo de las Colonias">
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1;">
+          <label>Fecha:</label>
+          <input type="text" id="edit-match-date" placeholder="Sábado 24 Mayo">
+        </div>
+        <div style="flex:1;">
+          <label>Hora:</label>
+          <input type="text" id="edit-match-time" placeholder="16:00">
+        </div>
+      </div>
+      <label>Cancha / Lugar:</label>
+      <input type="text" id="edit-match-venue" placeholder="Cancha La Victoria">
+      <button class="btn btn-primary" onclick="app.saveNewMatch()">Guardar Partido</button>
+    </div>
   </div>
 
   <script>
-    document.getElementById('shareBtn').href = 'whatsapp://send?text=' + encodeURIComponent('🟢⚪ *Colonia San Luis – Perla Verde* ⚽\n¡Descarga la app oficial del equipo en un solo clic aquí:\n' + window.location.href);
+    // --- Data Store & State (LocalStorage synced) ---
+    const DB_KEY = 'perla_verde_pwa_data_v1';
+
+    const INITIAL_PLAYERS = [
+      { id: 1, name: "Mateo Rodríguez", nickname: "Capi", jersey: 10, pos: "VOLANTE", phone: "3001234567", doc: "1098765432", status: "ACTIVO" },
+      { id: 2, name: "Carlos Mendoza", nickname: "Toro", jersey: 9, pos: "DELANTERO", phone: "3012345678", doc: "1098765433", status: "ACTIVO" },
+      { id: 3, name: "Andrés Gómez", nickname: "Zurdo", jersey: 11, pos: "EXTREMO", phone: "3023456789", doc: "1098765434", status: "ACTIVO" },
+      { id: 4, name: "David Ospina", nickname: "Gato", jersey: 1, pos: "PORTERO", phone: "3034567890", doc: "1098765435", status: "ACTIVO" },
+      { id: 5, name: "Julián Castro", nickname: "Muro", jersey: 4, pos: "DEFENSA", phone: "3045678901", doc: "1098765436", status: "ACTIVO" },
+      { id: 6, name: "Santiago Pérez", nickname: "Rifle", jersey: 7, pos: "EXTREMO", phone: "3056789012", doc: "1098765437", status: "ACTIVO" },
+      { id: 7, name: "Felipe Ramírez", nickname: "Tanque", jersey: 5, pos: "VOLANTE", phone: "3067890123", doc: "1098765438", status: "ACTIVO" },
+      { id: 8, name: "Sebastián Mora", nickname: "Sebas", jersey: 3, pos: "DEFENSA", phone: "3078901234", doc: "1098765439", status: "ACTIVO" },
+      { id: 9, name: "Nicolás Vargas", nickname: "Nico", jersey: 2, pos: "DEFENSA", phone: "3089012345", doc: "1098765440", status: "ACTIVO" },
+      { id: 10, name: "Alejandro Ruiz", nickname: "Alejo", jersey: 8, pos: "VOLANTE", phone: "3090123456", doc: "1098765441", status: "ACTIVO" }
+    ];
+
+    const INITIAL_MATCH = {
+      id: 1,
+      opponent: "Real Santander",
+      tournament: "Torneo de las Colonias",
+      date: "Sábado 24 Mayo",
+      time: "16:00",
+      venue: "Cancha La Victoria",
+      isPlayed: false,
+      isClosed: false,
+      refereeFee: 10000,
+      callUps: [
+        { playerId: 1, status: "CONFIRMADO", reason: null },
+        { playerId: 2, status: "CONFIRMADO", reason: null },
+        { playerId: 3, status: "NO_CONFIRMADO", reason: null },
+        { playerId: 4, status: "CONFIRMADO", reason: null },
+        { playerId: 5, status: "NO_CONFIRMADO", reason: null },
+        { playerId: 6, status: "RECHAZADO", reason: "Trabajo" },
+        { playerId: 7, status: "NO_CONFIRMADO", reason: null },
+        { playerId: 8, status: "CONFIRMADO", reason: null }
+      ]
+    };
+
+    function loadData() {
+      const saved = localStorage.getItem(DB_KEY);
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e){}
+      }
+      return {
+        role: "ADMIN",
+        players: INITIAL_PLAYERS,
+        matches: [INITIAL_MATCH],
+        payments: [
+          { playerId: 1, matchId: 1, amountOwed: 10000, amountPaid: 10000 },
+          { playerId: 2, matchId: 1, amountOwed: 10000, amountPaid: 0 },
+          { playerId: 3, matchId: 1, amountOwed: 10000, amountPaid: 0 },
+          { playerId: 4, matchId: 1, amountOwed: 10000, amountPaid: 10000 }
+        ],
+        stats: [
+          { playerId: 2, goals: 7, assists: 2, yellow: 1, red: 0 },
+          { playerId: 3, goals: 5, assists: 6, yellow: 0, red: 0 },
+          { playerId: 1, goals: 4, assists: 5, yellow: 2, red: 0 },
+          { playerId: 6, goals: 3, assists: 1, yellow: 1, red: 0 }
+        ]
+      };
+    }
+
+    const state = loadData();
+    function saveData() {
+      localStorage.setItem(DB_KEY, JSON.stringify(state));
+    }
+
+    // --- App Controller ---
+    const app = {
+      currentMatchId: 1,
+      publicSelectedPlayerId: null,
+      publicDecision: null,
+
+      init() {
+        this.updateRoleUI();
+        this.renderDashboard();
+        this.renderMatches();
+        this.renderPlayersList();
+        this.renderCuotas();
+        this.renderStats();
+
+        // Check URL for public confirmation link
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('confirmar') || window.location.hash.includes('confirmar')) {
+          this.openPublicConfirmation();
+        }
+      },
+
+      navigate(viewId) {
+        document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+
+        const target = document.getElementById('view-' + viewId);
+        if (target) target.classList.add('active');
+
+        const navIndex = ['dashboard', 'partidos', 'plantel', 'cuotas', 'stats'].indexOf(viewId);
+        if (navIndex !== -1) {
+          document.querySelectorAll('.nav-item')[navIndex].classList.add('active');
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      },
+
+      updateRoleUI() {
+        const icons = { ADMIN: "👑", DT: "📋", JUGADOR: "⚽" };
+        document.getElementById('role-label').innerText = state.role;
+        document.getElementById('role-icon').innerText = icons[state.role] || "👑";
+      },
+
+      toggleRole() {
+        const roles = ["ADMIN", "DT", "JUGADOR"];
+        const next = roles[(roles.indexOf(state.role) + 1) % roles.length];
+        state.role = next;
+        saveData();
+        this.updateRoleUI();
+      },
+
+      // --- Dashboard Rendering ---
+      renderDashboard() {
+        const match = state.matches.find(m => !m.isPlayed) || state.matches[0];
+        if (!match) return;
+
+        document.getElementById('dash-rival-name').innerText = match.opponent;
+        document.getElementById('dash-rival-initials').innerText = match.opponent.slice(0, 3).toUpperCase();
+        document.getElementById('dash-match-date').innerText = match.date;
+        document.getElementById('dash-match-time').innerText = match.time;
+        document.getElementById('dash-match-venue').innerText = match.venue;
+
+        const conf = match.callUps.filter(c => c.status === 'CONFIRMADO').length;
+        const rej = match.callUps.filter(c => c.status === 'RECHAZADO').length;
+        const pend = match.callUps.filter(c => c.status === 'NO_CONFIRMADO').length;
+
+        document.getElementById('dash-confirmed-count').innerText = conf;
+        document.getElementById('dash-rejected-count').innerText = rej;
+        document.getElementById('dash-pending-count').innerText = pend;
+
+        // Financials
+        const totalPaid = state.payments.reduce((acc, p) => acc + p.amountPaid, 0);
+        const totalDebt = state.payments.reduce((acc, p) => acc + (p.amountOwed - p.amountPaid), 0);
+        document.getElementById('dash-total-collected').innerText = '$' + totalPaid.toLocaleString('es-CO');
+        document.getElementById('dash-total-pending').innerText = '$' + totalDebt.toLocaleString('es-CO');
+
+        // Scorers
+        const topScorers = [...state.stats].sort((a,b) => b.goals - a.goals).slice(0, 3);
+        const scorersHtml = topScorers.map((s, idx) => {
+          const pl = state.players.find(p => p.id === s.playerId) || { name: "Jugador", jersey: 0 };
+          const medals = ['🥇', '🥈', '🥉'];
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border);">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span>${medals[idx]}</span>
+                <strong>#${pl.jersey} ${pl.name}</strong>
+              </div>
+              <span style="font-weight:800; color:var(--primary);">${s.goals} goles</span>
+            </div>
+          `;
+        }).join('');
+        document.getElementById('dash-scorers-list').innerHTML = scorersHtml;
+      },
+
+      // --- Matches & Convocatorias ---
+      renderMatches() {
+        const container = document.getElementById('matches-list-container');
+        if (!container) return;
+
+        container.innerHTML = state.matches.map(m => {
+          const conf = m.callUps.filter(c => c.status === 'CONFIRMADO').length;
+          const rej = m.callUps.filter(c => c.status === 'RECHAZADO').length;
+          const pend = m.callUps.filter(c => c.status === 'NO_CONFIRMADO').length;
+
+          return `
+            <div class="card">
+              <div class="card-header">
+                <span class="hero-badge" style="background:#E8F5E9; color:var(--primary);">${m.tournament}</span>
+                <span style="font-size:0.75rem; font-weight:700; color:${m.isClosed ? 'var(--status-danger)' : 'var(--status-active)'}">
+                  ${m.isClosed ? '🔒 Convocatoria Cerrada' : '🟢 Abierta'}
+                </span>
+              </div>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <h3 style="font-family:'Cabinet Grotesk'; font-size:1.15rem;">Colonia San Luis vs ${m.opponent}</h3>
+              </div>
+              <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:12px;">
+                📅 ${m.date} • ⏰ ${m.time} • 📍 ${m.venue}
+              </div>
+              <div class="counters-row">
+                <div class="counter-box confirmed"><div class="counter-number">${conf}</div><div class="counter-label">Confirmados</div></div>
+                <div class="counter-box rejected"><div class="counter-number">${rej}</div><div class="counter-label">Bajas</div></div>
+                <div class="counter-box pending"><div class="counter-number">${pend}</div><div class="counter-label">Pendientes</div></div>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-primary" onclick="app.openConvocatoria(${m.id})">📋 Convocatoria</button>
+                <button class="btn btn-outline" onclick="app.openPoster(${m.id})">🎨 Póster</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      },
+
+      openConvocatoria(matchId) {
+        this.currentMatchId = matchId;
+        const match = state.matches.find(m => m.id === matchId);
+        if (!match) return;
+
+        document.getElementById('convo-modal-title').innerText = "Convocatoria vs " + match.opponent;
+        document.getElementById('convo-modal-subtitle').innerText = `${match.date} • ${match.time} • ${match.venue}`;
+
+        const conf = match.callUps.filter(c => c.status === 'CONFIRMADO').length;
+        const rej = match.callUps.filter(c => c.status === 'RECHAZADO').length;
+        const pend = match.callUps.filter(c => c.status === 'NO_CONFIRMADO').length;
+
+        document.getElementById('convo-count-conf').innerText = conf;
+        document.getElementById('convo-count-rej').innerText = rej;
+        document.getElementById('convo-count-pend').innerText = pend;
+
+        document.getElementById('convo-close-call-btn').innerText = match.isClosed ? "🔓 Reabrir Convocatoria" : "🔒 Cerrar Lista Definitiva (Llamado Final)";
+
+        const listContainer = document.getElementById('convo-players-list');
+        listContainer.innerHTML = match.callUps.map(cu => {
+          const pl = state.players.find(p => p.id === cu.playerId);
+          if (!pl) return '';
+          const statusClass = cu.status === 'CONFIRMADO' ? 'confirmed' : cu.status === 'RECHAZADO' ? 'rejected' : 'pending';
+          const statusText = cu.status === 'CONFIRMADO' ? '✓ Confirmado' : cu.status === 'RECHAZADO' ? `✗ Baja (${cu.reason || 'Sin motivo'})` : '⏳ Pendiente';
+
+          return `
+            <div class="player-row">
+              <div class="player-info">
+                <div class="jersey-badge">#${pl.jersey}</div>
+                <div>
+                  <div style="font-weight:700; font-size:0.85rem;">${pl.name}</div>
+                  <span class="status-pill ${statusClass}">${statusText}</span>
+                </div>
+              </div>
+              <div>
+                <button style="border:none; background:#E8F5E9; color:var(--primary); padding:6px 10px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="app.setPlayerStatus(${match.id}, ${pl.id}, 'CONFIRMADO')">✓</button>
+                <button style="border:none; background:#FFEBEE; color:var(--status-danger); padding:6px 10px; border-radius:8px; font-weight:800; cursor:pointer;" onclick="app.setPlayerStatus(${match.id}, ${pl.id}, 'RECHAZADO')">✗</button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        this.openModal('modal-convocatoria');
+      },
+
+      setPlayerStatus(matchId, playerId, newStatus) {
+        const match = state.matches.find(m => m.id === matchId);
+        if (!match) return;
+        const cu = match.callUps.find(c => c.playerId === playerId);
+        if (cu) {
+          cu.status = newStatus;
+          cu.reason = newStatus === 'RECHAZADO' ? 'Marcado por DT' : null;
+          saveData();
+          this.renderDashboard();
+          this.renderMatches();
+          this.openConvocatoria(matchId);
+        }
+      },
+
+      toggleFinalCall() {
+        const match = state.matches.find(m => m.id === this.currentMatchId);
+        if (!match) return;
+        match.isClosed = !match.isClosed;
+        if (match.isClosed) {
+          // Descartar automáticamente a los no confirmados (Requisito 4)
+          match.callUps.forEach(cu => {
+            if (cu.status === 'NO_CONFIRMADO') {
+              cu.status = 'RECHAZADO';
+              cu.reason = 'Descartado por cierre de llamado final';
+            }
+          });
+          alert('Convocatoria cerrada. Los jugadores sin respuesta han sido excluidos automáticamente.');
+        } else {
+          alert('Convocatoria reabierta para confirmaciones.');
+        }
+        saveData();
+        this.renderDashboard();
+        this.renderMatches();
+        this.openConvocatoria(match.id);
+      },
+
+      // --- Confirmación Pública (Requisito 2) ---
+      openPublicConfirmation() {
+        const match = state.matches.find(m => !m.isPlayed) || state.matches[0];
+        if (!match) return;
+        document.getElementById('confirm-match-subtitle').innerText = `Colonia San Luis vs ${match.opponent} • ${match.date} ${match.time}`;
+
+        const select = document.getElementById('confirm-player-select');
+        select.innerHTML = '<option value="">-- Selecciona tu nombre --</option>' +
+          match.callUps.map(cu => {
+            const pl = state.players.find(p => p.id === cu.playerId);
+            return pl ? `<option value="${pl.id}">#${pl.jersey} ${pl.name} (${cu.status})</option>` : '';
+          }).join('');
+
+        this.publicDecision = null;
+        document.getElementById('confirm-pin').value = '';
+        document.getElementById('decision-yes').classList.remove('btn-primary');
+        document.getElementById('decision-no').classList.remove('btn-danger');
+        document.getElementById('absence-reason-box').style.display = 'none';
+
+        this.openModal('modal-public-confirm');
+      },
+
+      onPublicPlayerSelected() {
+        const playerId = parseInt(document.getElementById('confirm-player-select').value);
+        this.publicSelectedPlayerId = playerId;
+      },
+
+      selectDecision(yes) {
+        this.publicDecision = yes;
+        if (yes) {
+          document.getElementById('decision-yes').classList.add('btn-primary');
+          document.getElementById('decision-no').classList.remove('btn-danger');
+          document.getElementById('absence-reason-box').style.display = 'none';
+        } else {
+          document.getElementById('decision-no').classList.add('btn-danger');
+          document.getElementById('decision-yes').classList.remove('btn-primary');
+          document.getElementById('absence-reason-box').style.display = 'block';
+        }
+      },
+
+      submitPublicConfirmation() {
+        const playerId = parseInt(document.getElementById('confirm-player-select').value);
+        const pin = document.getElementById('confirm-pin').value.trim();
+
+        if (!playerId) {
+          alert('Por favor selecciona tu nombre.');
+          return;
+        }
+        if (this.publicDecision === null) {
+          alert('Por favor indica si asistirás o no.');
+          return;
+        }
+
+        const player = state.players.find(p => p.id === playerId);
+        if (!player) return;
+
+        // Verificación de los 2 últimos dígitos (cédula o celular o dorsal)
+        const validPin = (player.doc && player.doc.slice(-2)) || (player.phone && player.phone.slice(-2)) || String(player.jersey).padStart(2, '0');
+        if (pin !== validPin && pin !== validPin.slice(-2)) {
+          alert(`Código incorrecto. Ingresa los 2 últimos dígitos de tu cédula (${player.doc ? '***' + player.doc.slice(-2) : 'registrada'}).`);
+          return;
+        }
+
+        const match = state.matches.find(m => !m.isPlayed) || state.matches[0];
+        const cu = match.callUps.find(c => c.playerId === playerId);
+        if (cu) {
+          cu.status = this.publicDecision ? 'CONFIRMADO' : 'RECHAZADO';
+          cu.reason = this.publicDecision ? null : document.getElementById('absence-reason-select').value;
+          saveData();
+          alert(`¡Listo ${player.name}! Tu confirmación (${cu.status}) ha sido registrada correctamente.`);
+          this.closeModal('modal-public-confirm');
+          this.renderDashboard();
+          this.renderMatches();
+        }
+      },
+
+      // --- Difusión & WhatsApp (Requisito 1 & 3) ---
+      shareBroadcastWhatsApp() {
+        const match = state.matches.find(m => m.id === this.currentMatchId) || state.matches[0];
+        const confirmUrl = window.location.origin + '?confirmar=1';
+        const msg = `🟢⚪ COLONIA SAN LUIS – PERLA VERDE ⚪🟢\n\n📋 CONVOCATORIA — ${match.date} ${match.time}\n\n📍 Cancha: ${match.venue}\n🆚 Rival: ${match.opponent}\n\n👉 Confirma tu asistencia aquí:\n${confirmUrl}\n\n¡Vamos Colonia! 💪`;
+        const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+      },
+
+      remindPendingWhatsApp() {
+        const match = state.matches.find(m => m.id === this.currentMatchId) || state.matches[0];
+        const pending = match.callUps.filter(c => c.status === 'NO_CONFIRMADO');
+        if (pending.length === 0) {
+          alert('¡Excelente! No hay jugadores pendientes de confirmación.');
+          return;
+        }
+        const names = pending.map(c => {
+          const p = state.players.find(pl => pl.id === c.playerId);
+          return p ? `• #${p.jersey} ${p.name}` : '';
+        }).join('\n');
+
+        const confirmUrl = window.location.origin + '?confirmar=1';
+        const msg = `⚠️ RECORDATORIO CONVOCATORIA — COLONIA SAN LUIS\nPartido: vs ${match.opponent} (${match.date})\n\nJugadores con confirmación pendiente:\n${names}\n\nPor favor confirmar hoy mismo:\n${confirmUrl}`;
+        const url = `https://wa.me/?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+      },
+
+      // --- Póster de Matchday (Requisito 5) ---
+      openPoster(matchId) {
+        const match = state.matches.find(m => m.id === matchId) || state.matches[0];
+        document.getElementById('poster-rival').innerText = match.opponent.toUpperCase();
+        document.getElementById('poster-datetime').innerText = `${match.date} • ${match.time}`;
+        document.getElementById('poster-venue').innerText = `📍 ${match.venue}`;
+
+        const confirmed = match.callUps.filter(c => c.status === 'CONFIRMADO');
+        const squad = (confirmed.length > 0 ? confirmed : match.callUps).map(c => {
+          const pl = state.players.find(p => p.id === c.playerId);
+          return pl ? `<div>#${pl.jersey} ${pl.name}</div>` : '';
+        }).join('');
+
+        document.getElementById('poster-squad').innerHTML = squad || '<div>Plantel Oficial</div>';
+        this.openModal('modal-poster');
+      },
+
+      setPosterTheme(themeClass) {
+        const card = document.getElementById('poster-card-render');
+        card.className = 'poster-container ' + themeClass;
+      },
+
+      sharePosterWhatsApp() {
+        const match = state.matches.find(m => m.id === this.currentMatchId) || state.matches[0];
+        const msg = `🟢⚪ MATCHDAY — COLONIA SAN LUIS ⚪🟢\n🏆 Torneo Oficial\n\nCOLONIA SAN LUIS vs ${match.opponent.toUpperCase()}\n📅 Fecha: ${match.date}\n⏰ Hora: ${match.time}\n📍 Cancha: ${match.venue}\n\n¡Vamos Perla Verde por los 3 puntos! ⚽🔥`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+      },
+
+      // --- Plantel ---
+      renderPlayersList() {
+        const q = (document.getElementById('player-search-input')?.value || '').toLowerCase();
+        const container = document.getElementById('players-list-container');
+        if (!container) return;
+
+        const filtered = state.players.filter(p => p.name.toLowerCase().includes(q) || String(p.jersey).includes(q));
+        container.innerHTML = filtered.map(p => `
+          <div class="player-row">
+            <div class="player-info">
+              <div class="jersey-badge">#${p.jersey}</div>
+              <div>
+                <div style="font-weight:700; font-size:0.9rem;">${p.name} <span style="font-size:0.75rem; color:var(--text-muted);">(${p.nickname || p.pos})</span></div>
+                <div style="font-size:0.72rem; color:var(--text-muted);">${p.pos} • Cel: ${p.phone}</div>
+              </div>
+            </div>
+            <a href="https://wa.me/57${p.phone}" target="_blank" class="btn btn-whatsapp" style="width:auto; padding:6px 12px; font-size:0.75rem;">WhatsApp</a>
+          </div>
+        `).join('');
+      },
+
+      // --- Cuotas ---
+      renderCuotas() {
+        const container = document.getElementById('debtors-list-container');
+        if (!container) return;
+
+        let totalDebt = 0;
+        let totalPaid = 0;
+
+        const html = state.players.map(p => {
+          const userPayments = state.payments.filter(pay => pay.playerId === p.id);
+          const owed = userPayments.reduce((a, b) => a + b.amountOwed, 0);
+          const paid = userPayments.reduce((a, b) => a + b.amountPaid, 0);
+          const balance = owed - paid;
+
+          totalDebt += Math.max(0, balance);
+          totalPaid += paid;
+
+          return `
+            <div class="player-row">
+              <div class="player-info">
+                <div class="jersey-badge">#${p.jersey}</div>
+                <div>
+                  <div style="font-weight:700;">${p.name}</div>
+                  <div style="font-size:0.75rem; color:${balance > 0 ? 'var(--status-danger)' : 'var(--status-active)'}">
+                    ${balance > 0 ? 'Debe: $' + balance.toLocaleString('es-CO') : 'Al día ✓'}
+                  </div>
+                </div>
+              </div>
+              <button class="btn btn-outline" style="width:auto; padding:6px 12px; font-size:0.75rem;" onclick="app.payReferee(${p.id})">
+                ${balance > 0 ? 'Registrar Pago' : 'Pagado'}
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        document.getElementById('cuotas-total-debt').innerText = '$' + totalDebt.toLocaleString('es-CO');
+        document.getElementById('cuotas-total-paid').innerText = '$' + totalPaid.toLocaleString('es-CO');
+        container.innerHTML = html;
+      },
+
+      payReferee(playerId) {
+        let payment = state.payments.find(p => p.playerId === playerId);
+        if (!payment) {
+          payment = { playerId, matchId: 1, amountOwed: 10000, amountPaid: 0 };
+          state.payments.push(payment);
+        }
+        payment.amountPaid = payment.amountOwed;
+        saveData();
+        this.renderCuotas();
+        this.renderDashboard();
+        alert('Pago registrado con éxito.');
+      },
+
+      // --- Stats ---
+      renderStats() {
+        const goalsTable = document.getElementById('stats-goals-table');
+        if (goalsTable) {
+          goalsTable.innerHTML = state.stats.sort((a,b) => b.goals - a.goals).map((s, idx) => {
+            const p = state.players.find(pl => pl.id === s.playerId) || { name: "Jugador", jersey: 0 };
+            return `
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);">
+                <span>#${p.jersey} ${p.name}</span>
+                <span><strong>${s.goals}</strong> goles (${s.assists} asist.)</span>
+              </div>
+            `;
+          }).join('');
+        }
+        const cardsTable = document.getElementById('stats-cards-table');
+        if (cardsTable) {
+          cardsTable.innerHTML = state.stats.map(s => {
+            const p = state.players.find(pl => pl.id === s.playerId) || { name: "Jugador", jersey: 0 };
+            return `
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--border);">
+                <span>#${p.jersey} ${p.name}</span>
+                <span>🟨 ${s.yellow} | 🟥 ${s.red}</span>
+              </div>
+            `;
+          }).join('');
+        }
+      },
+
+      openModal(id) { document.getElementById(id)?.classList.add('active'); },
+      closeModal(id) { document.getElementById(id)?.classList.remove('active'); },
+
+      openNewMatchModal() { this.openModal('modal-match-edit'); },
+      saveNewMatch() {
+        const opp = document.getElementById('edit-match-opponent').value.trim() || 'Rival';
+        const tour = document.getElementById('edit-match-tournament').value.trim() || 'Torneo Amateur';
+        const date = document.getElementById('edit-match-date').value.trim() || 'Sábado';
+        const time = document.getElementById('edit-match-time').value.trim() || '16:00';
+        const venue = document.getElementById('edit-match-venue').value.trim() || 'Cancha Municipal';
+
+        const newMatch = {
+          id: Date.now(),
+          opponent: opp,
+          tournament: tour,
+          date, time, venue,
+          isPlayed: false,
+          isClosed: false,
+          refereeFee: 10000,
+          callUps: state.players.map(p => ({ playerId: p.id, status: 'NO_CONFIRMADO', reason: null }))
+        };
+
+        state.matches.unshift(newMatch);
+        saveData();
+        this.closeModal('modal-match-edit');
+        this.renderDashboard();
+        this.renderMatches();
+        alert('Nuevo partido programado y convocatoria abierta.');
+      },
+
+      openNewPlayerModal() {
+        const name = prompt("Nombre completo del nuevo jugador:");
+        if (!name) return;
+        const jersey = parseInt(prompt("Número de dorsal (camiseta):", "12")) || 12;
+        const phone = prompt("Celular para WhatsApp:", "3000000000") || "";
+
+        const newPl = {
+          id: Date.now(),
+          name,
+          jersey,
+          pos: "VOLANTE",
+          phone,
+          doc: "10980000" + jersey,
+          status: "ACTIVO"
+        };
+        state.players.push(newPl);
+        saveData();
+        this.renderPlayersList();
+        alert(`Jugador #${jersey} ${name} agregado al plantel.`);
+      }
+    };
+
+    // Role switcher listener
+    document.getElementById('role-switcher-btn').addEventListener('click', () => app.toggleRole());
+
+    // --- Service Worker Registration ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((reg) => console.log('PWA ServiceWorker registrado con éxito en scope:', reg.scope))
+          .catch((err) => console.log('Error registrando ServiceWorker:', err));
+      });
+    }
+
+    // --- PWA Installation Prompt ---
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      const banner = document.getElementById('pwa-install-banner');
+      if (banner) banner.style.display = 'flex';
+    });
+
+    document.getElementById('pwa-install-btn')?.addEventListener('click', async () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        console.log('Resultado de instalación:', outcome);
+        deferredPrompt = null;
+        document.getElementById('pwa-install-banner').style.display = 'none';
+      }
+    });
+
+    // Start App
+    app.init();
   </script>
 </body>
 </html>
