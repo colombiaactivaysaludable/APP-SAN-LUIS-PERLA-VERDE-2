@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Descargar App - Colonia San Luis Perla Verde</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    body {
+      background: linear-gradient(135deg, #0d3b14 0%, #1b5e20 50%, #2e7d32 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #333;
+    }
+    .card {
+      background: #ffffff;
+      max-width: 480px;
+      width: 100%;
+      border-radius: 24px;
+      padding: 32px 24px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .badge-org {
+      display: inline-block;
+      background: #e8f5e9;
+      color: #1b5e20;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    .team-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #1b5e20;
+      margin-bottom: 4px;
+    }
+    .subtitle {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 24px;
+    }
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 18px;
+      font-weight: 800;
+      padding: 18px 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(27, 94, 32, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      cursor: pointer;
+      border: none;
+      width: 100%;
+    }
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(27, 94, 32, 0.5);
+    }
+    .btn-download:active {
+      transform: translateY(1px);
+    }
+    .apk-size-info {
+      font-size: 12px;
+      color: #888;
+      margin-top: 8px;
+      margin-bottom: 24px;
+    }
+    .steps-box {
+      background: #f8faf8;
+      border: 1px solid #e0e6e0;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+    .steps-box h3 {
+      font-size: 14px;
+      color: #1b5e20;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .step-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      line-height: 1.4;
+      color: #444;
+    }
+    .step-item:last-child {
+      margin-bottom: 0;
+    }
+    .step-num {
+      background: #1b5e20;
+      color: #fff;
+      font-weight: bold;
+      font-size: 12px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .btn-share {
+      background: #25d366;
+      color: white;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      font-size: 14px;
+      font-weight: 700;
+      border-radius: 12px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <span class="badge-org">Corp. Colombia Activa y Saludable</span>
+    <h1 class="team-title">Colonia San Luis</h1>
+    <h2 style="font-size: 18px; color: #2e7d32; font-weight: 700; margin-bottom: 6px;">Perla Verde • App Oficial</h2>
+    <p class="subtitle">Gestión de convocatorias, cuotas de arbitraje, pagos y estadísticas.</p>
+
+    <!-- MAIN SINGLE-CLICK DOWNLOAD BUTTON -->
+    <a href="/PerlaVerde_ColoniaSanLuis.apk" download="PerlaVerde_ColoniaSanLuis.apk" class="btn-download" id="downloadBtn">
+      <span>⬇️</span>
+      <span>DESCARGAR APK DIRECTO</span>
+    </a>
+    <p class="apk-size-info">Instalador oficial Android • Seguro y sin costo</p>
+
+    <div class="steps-box">
+      <h3>¿Cómo instalar en tu celular?</h3>
+      <div class="step-item">
+        <span class="step-num">1</span>
+        <span>Toca el botón verde <strong>"DESCARGAR APK"</strong> de arriba.</span>
+      </div>
+      <div class="step-item">
+        <span class="step-num">2</span>
+        <span>Al terminar la descarga, pulsa en la notificación para <strong>Abrir el archivo</strong>.</span>
+      </div>
+      <div class="step-item">
+        <span class="step-num">3</span>
+        <span>Si tu celular muestra "Permitir aplicaciones de esta fuente", activa el permiso y pulsa <strong>"Instalar"</strong>.</span>
+      </div>
+    </div>
+
+    <a href="whatsapp://send?text=🟢⚪ ¡Hola equipo! Descarga la app oficial de Colonia San Luis – Perla Verde aquí: " class="btn-share" id="shareBtn">
+      <span>💬 Compartir con el equipo en WhatsApp</span>
+    </a>
+  </div>
+
+  <script>
+    document.getElementById('shareBtn').href = 'whatsapp://send?text=' + encodeURIComponent('🟢⚪ *Colonia San Luis – Perla Verde* ⚽\n¡Descarga la app oficial del equipo en un solo clic aquí:\n' + window.location.href);
+  </script>
+</body>
+</html>

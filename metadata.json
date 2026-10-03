@@ -1,0 +1,8 @@
+{
+  "name": "Perla Verde",
+  "description": "Gestión del equipo de fútbol amateur Colonia San Luis – Perla Verde",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
